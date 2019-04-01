@@ -23,9 +23,9 @@ module q1
 
 	// if all are less attacked than current
 	[] current_queen_under_attack & case_all_less -> 0.33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	
 	// if all are more attacked than current
-	//[] current_queen_under_attack & case_all_more -> p/pt*0.33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + p/pt*.33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + p/pt*.34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more -> 0.33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);	
+	[] current_queen_under_attack & case_all_more -> pr*0.33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + pr*.33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + pr*.34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec) + not_pr: (p' = p - dec) ;	
 
 	// if all are more attacked than current but c1
 	[] current_queen_under_attack & case_all_more_but_c1 & (q1x != column1) & (q2x = column1) -> 1: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec);
@@ -138,6 +138,9 @@ formula case_all_more_but_c1_c2_c3 = (number_attacking_current_queen > number_at
 formula case_all_more_but_c1_c2_c4 = (number_attacking_current_queen > number_attacking_position1) & (number_attacking_current_queen > number_attacking_position2) & (number_attacking_current_queen <= number_attacking_positions3) & (number_attacking_current_queen > number_attacking_position4);
 formula case_all_more_but_c2_c3_c4 = (number_attacking_current_queen <= number_attacking_position1) & (number_attacking_current_queen > number_attacking_position2) & (number_attacking_current_queen > number_attacking_positions3) & (number_attacking_current_queen > number_attacking_position4);
 formula case_all_more_but_c1_c3_c4 = (number_attacking_current_queen > number_attacking_position1) & (number_attacking_current_queen <= number_attacking_position2) & (number_attacking_current_queen > number_attacking_positions3) & (number_attacking_current_queen > number_attacking_position4);
+
+formula pr = p/pt;
+formula not_pr = (.33-(pr*.33)) + (.33-(pr*.33)) + (.34-(pr*.34));
 
 // make additional modules
 module q2 = q1 [ q1x=q2x, q2x=q1x, q1y=q2y, q2y=q1y ] endmodule

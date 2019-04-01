@@ -8,7 +8,7 @@ const int column4 = 4;
 const int dec = 1;
 const int pt = 100;
 
-global p : [0..100] init 1;
+global p : [0..100] init 100;
 
 global q1x : [1..4] init 1;
 global q1y : [1..4] init 1;
@@ -24,8 +24,9 @@ module q1
 	// if all are less attacked than current
 	[] current_queen_under_attack & case_all_less -> 0.33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	// if all are more attacked than current
-	[] current_queen_under_attack & case_all_more -> p/pt*0.33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + p/pt*.33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + p/pt*.34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
-	
+	//[] current_queen_under_attack & case_all_more -> p/pt*0.33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + p/pt*.33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + p/pt*.34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more -> 0.33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);	
+
 	// if all are more attacked than current but c1
 	[] current_queen_under_attack & case_all_more_but_c1 & (q1x != column1) & (q2x = column1) -> 1: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec);
 	[] current_queen_under_attack & case_all_more_but_c1 & (q1x != column1) & (q3x = column1) -> 1: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
@@ -48,34 +49,34 @@ module q1
 	[] current_queen_under_attack & case_all_more_but_c1_c2 & (q1x != column1 | q1x != column2) & (q2x = column1 | q2x = column2) & (q4x = column1 | q4x = column2) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	[] current_queen_under_attack & case_all_more_but_c1_c2 & (q1x != column1 | q1x != column2) & (q3x = column1 | q3x = column2) & (q4x = column1 | q4x = column2) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
 	// if all are more attacked than current but c1 c3
-	[] current_queen_under_attack & case_all_more_but_c1_c3 & (q1x != (column1 | column3)) & (q2x = (column1 | column3) & q3x = (column1 | column3)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c1_c3 & (q1x != (column1 | column3)) & (q2x = (column1 | column3) & q4x = (column1 | column3)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c1_c3 & (q1x != (column1 | column3)) & (q3x = (column1 | column3) & q4x = (column1 | column3)) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q4x' = q3x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c3 & (q1x != column1 | q1x != column3) & (q2x = column1 | q2x = column3) & (q3x = column1 | q3x = column3) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c3 & (q1x != column1 | q1x != column3) & (q2x = column1 | q2x = column3) & (q4x = column1 | q4x = column3) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c3 & (q1x != column1 | q1x != column3) & (q3x = column1 | q3x = column3) & (q4x = column1 | q4x = column3) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	// if all are more attacked than current but c1 c4
-	[] current_queen_under_attack & case_all_more_but_c1_c4 & (q1x != (column1 | column4)) & (q2x = (column1 | column4) & q3x = (column1 | column4)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c1_c4 & (q1x != (column1 | column4)) & (q2x = (column1 | column4) & q4x = (column1 | column4)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c1_c4 & (q1x != (column1 | column4)) & (q3x = (column1 | column4) & q4x = (column1 | column4)) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q4x' = q3x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c4 & (q1x != column1 | q1x != column4) & (q2x = column1 | q2x = column4) & (q3x = column1 | q3x = column4) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c4 & (q1x != column1 | q1x != column4) & (q2x = column1 | q2x = column4) & (q4x = column1 | q4x = column4) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c4 & (q1x != column1 | q1x != column4) & (q3x = column1 | q3x = column4) & (q4x = column1 | q4x = column4) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	// if all are more attacked than current but c2 c3
-	[] current_queen_under_attack & case_all_more_but_c2_c3 & (q1x != (column2 | column3)) & (q2x = (column2 | column3) & q3x = (column2 | column3)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c2_c3 & (q1x != (column2 | column3)) & (q2x = (column2 | column3) & q4x = (column2 | column3)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c2_c3 & (q1x != (column2 | column3)) & (q3x = (column2 | column3) & q4x = (column2 | column3)) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q4x' = q3x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c2_c3 & (q1x != column2 | q1x != column3) & (q2x = column2 | q2x = column3) & (q3x = column2 | q3x = column3) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c2_c3 & (q1x != column2 | q1x != column3) & (q2x = column2 | q2x = column3) & (q4x = column2 | q4x = column3) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c2_c3 & (q1x != column2 | q1x != column3) & (q3x = column2 | q3x = column3) & (q4x = column2 | q4x = column3) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	// if all are more attacked than current but c2 c4
-	[] current_queen_under_attack & case_all_more_but_c2_c4 & (q1x != (column2 | column4)) & (q2x = (column2 | column4) & q3x = (column2 | column4)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c2_c4 & (q1x != (column2 | column4)) & (q2x = (column2 | column4) & q4x = (column2 | column4)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c2_c4 & (q1x != (column2 | column4)) & (q3x = (column2 | column4) & q4x = (column2 | column4)) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q4x' = q3x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c2_c4 & (q1x != column2 | q1x != column4) & (q2x = column2 | q2x = column4) & (q3x = column2 | q3x = column4) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c2_c4 & (q1x != column2 | q1x != column4) & (q2x = column2 | q2x = column4) & (q4x = column2 | q4x = column4) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c2_c4 & (q1x != column2 | q1x != column4) & (q3x = column2 | q3x = column4) & (q4x = column2 | q4x = column4) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x)& (p' = p - dec);
 	// if all are more attacked than current but c3 c4
-	[] current_queen_under_attack & case_all_more_but_c3_c4 & (q1x != (column3 | column4)) & (q2x = (column3 | column4) & q3x = (column3 | column4)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c3_c4 & (q1x != (column3 | column4)) & (q2x = (column3 | column4) & q4x = (column3 | column4)) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
-	[] current_queen_under_attack & case_all_more_but_c3_c4 & (q1x != (column3 | column4)) & (q3x = (column3 | column4) & q4x = (column3 | column4)) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q4x' = q3x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c3_c4 & (q1x != column3 | q1x != column4) & (q2x = column3 | q2x = column4) & (q3x = column3 | q3x = column4) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c3_c4 & (q1x != column3 | q1x != column4) & (q2x = column3 | q2x = column4) & (q4x = column3 | q4x = column4) -> .5: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c3_c4 & (q1x != column3 | q1x != column4) & (q3x = column3 | q3x = column4) & (q4x = column3 | q4x = column4) -> .5: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .5: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 
 	// if all are more attacked than current but c1 c2 c3
-	[] current_queen_under_attack & case_all_more_but_c1_c2_c3 & (q1x != (column1 | column2 | column3)) & (q2x = (column1 | column2 | column3) & q3x = (column1 | column2 | column3) & q4x = (column1 | column2 | column3)) -> .33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c2_c3 & (q1x != column1 | q1x != column2 | q1x != column3) & (q2x = column1 | q2x = column2 | q2x = column3) & (q3x = column1 | q3x = column2 | q3x = column3) & (q4x = column1 | q4x = column2 | q4x = column3) -> .33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	// if all are more attacked than current but c1 c2 c4
-	[] current_queen_under_attack & case_all_more_but_c1_c2_c4 & (q1x != (column1 | column2 | column4)) & (q2x = (column1 | column2 | column4) & q3x = (column1 | column2 | column4) & q4x = (column1 | column2 | column3)) -> .33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c2_c4 & (q1x != column1 | q1x != column2 | q1x != column4) & (q2x = column1 | q2x = column2 | q2x = column4) & (q3x = column1 | q3x = column2 | q3x = column4) & (q4x = column1 | q4x = column2 | q4x = column3) -> .33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	// if all are more attacked than current but c2 c3 c4
-	[] current_queen_under_attack & case_all_more_but_c2_c3_c4 & (q1x != (column2 | column3 | column4)) & (q2x = (column2 | column3 | column4) & q3x = (column2 | column3 | column4) & q4x = (column2 | column3 | column4)) -> .33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c2_c3_c4 & (q1x != column2 | q1x != column3 | q1x != column4) & (q2x = column2 | q2x = column3 | q2x = column4) & (q3x = column2 | q3x = column3 | q3x = column4) & (q4x = column2 | q4x = column3 | q4x = column4) -> .33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	// if all are more attacked than current but c1 c3 c4
-	[] current_queen_under_attack & case_all_more_but_c1_c3_c4 & (q1x != (column1 | column3 | column4)) & (q2x = (column1 | column3 | column4) & q3x = (column1 | column3 | column4) & q4x = (column1 | column3 | column4)) -> .33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
+	[] current_queen_under_attack & case_all_more_but_c1_c3_c4 & (q1x != column1 | q1x != column3 | q1x != column4) & (q2x = column1 | q2x = column3 | q2x = column4) & (q3x = column1 | q3x = column3 | q3x =column4) & (q4x = column1 | q4x = column3 | q4x = column4) -> .33: (q1x' = q2x) & (q2x' = q1x) & (p' = p - dec) + .33: (q1x' = q3x) & (q3x' = q1x) & (p' = p - dec) + .34: (q1x' = q4x) & (q4x' = q1x) & (p' = p - dec);
 	
 endmodule
 

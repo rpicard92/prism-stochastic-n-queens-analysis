@@ -1,0 +1,22 @@
+dtmc
+
+global q1x : [1..4] init 1;
+global q1y : [1..4] init 1;
+global q2x : [1..4] init 2;
+global q2y : [1..4] init 2;
+global q3x : [1..4] init 3;
+global q3y : [1..4] init 3;
+global q4x : [1..4] init 4;
+global q4y : [1..4] init 4;
+
+module q1
+
+	 [] under_attack -> 0.3333: (q1x' = q2x) & (q2x' = q1x) + 0.3333: (q1x' = q3x) & (q3x' = q1x) + 0.3334: (q1x' = q4x) & (q4x' = q1x);
+
+endmodule
+
+formula under_attack = ((q1x-q2x) = (q1y-q2y) | (q1x-q2x) = -(q1y-q2y)) | ((q1x-q3x) = (q1y-q3y) | (q1x-q3x) = -(q1y-q3y)) | ((q1x-q4x) = (q1y-q4y) | (q1x-q4x) = -(q1y-q4y));
+
+module q2 = q1 [ q1x=q2x, q2x=q1x, q1y=q2y, q2y=q1y ] endmodule
+module q3 = q1 [ q1x=q3x, q3x=q1x, q1y=q3y, q3y=q1y ] endmodule
+module q4 = q1 [ q1x=q4x, q4x=q1x, q1y=q4y, q4y=q1y ] endmodule

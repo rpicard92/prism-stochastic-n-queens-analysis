@@ -1,0 +1,38 @@
+dtmc
+
+global q1x : [1..7] init 1;
+global q1y : [1..7] init 1;
+global q2x : [1..7] init 2;
+global q2y : [1..7] init 2;
+global q3x : [1..7] init 3;
+global q3y : [1..7] init 3;
+global q4x : [1..7] init 4;
+global q4y : [1..7] init 4;
+global q5x : [1..7] init 5;
+global q5y : [1..7] init 5;
+global q6x : [1..7] init 6;
+global q6y : [1..7] init 6;
+global q7x : [1..7] init 7;
+global q7y : [1..7] init 7;
+
+module q1
+
+	 [] (under_attack_diag | under_attack_column) & q1x = 1 -> 0.1666: (q1x' = 2) + 0.1666: (q1x' = 3) + 0.1666: (q1x' = 4) + 0.1666: (q1x' = 5) + 0.1666: (q1x' = 6) + 0.1670: (q1x' = 7);
+	 [] (under_attack_diag | under_attack_column) & q1x = 2 -> 0.1666: (q1x' = 1) + 0.1666: (q1x' = 3) + 0.1666: (q1x' = 4) + 0.1666: (q1x' = 5) + 0.1666: (q1x' = 6) + 0.1670: (q1x' = 7);
+	 [] (under_attack_diag | under_attack_column) & q1x = 3 -> 0.1666: (q1x' = 2) + 0.1666: (q1x' = 1) + 0.1666: (q1x' = 4) + 0.1666: (q1x' = 5) + 0.1666: (q1x' = 6) + 0.1670: (q1x' = 7);
+	 [] (under_attack_diag | under_attack_column) & q1x = 4 -> 0.1666: (q1x' = 2) + 0.1666: (q1x' = 3) + 0.1666: (q1x' = 1) + 0.1666: (q1x' = 5) + 0.1666: (q1x' = 6) + 0.1670: (q1x' = 7);
+	 [] (under_attack_diag | under_attack_column) & q1x = 5 -> 0.1666: (q1x' = 2) + 0.1666: (q1x' = 3) + 0.1666: (q1x' = 4) + 0.1666: (q1x' = 1) + 0.1666: (q1x' = 6) + 0.1670: (q1x' = 7);
+	 [] (under_attack_diag | under_attack_column) & q1x = 6 -> 0.1666: (q1x' = 2) + 0.1666: (q1x' = 3) + 0.1666: (q1x' = 4) + 0.1666: (q1x' = 5) + 0.1666: (q1x' = 1) + 0.1670: (q1x' = 7);
+	 [] (under_attack_diag | under_attack_column) & q1x = 7 -> 0.1666: (q1x' = 2) + 0.1666: (q1x' = 3) + 0.1666: (q1x' = 4) + 0.1666: (q1x' = 5) + 0.1666: (q1x' = 6) + 0.1670: (q1x' = 1);
+
+endmodule
+
+formula under_attack_diag = ((q1x-q2x) = (q1y-q2y) | (q1x-q2x) = -(q1y-q2y)) | ((q1x-q3x) = (q1y-q3y) | (q1x-q3x) = -(q1y-q3y)) | ((q1x-q4x) = (q1y-q4y) | (q1x-q4x) = -(q1y-q4y)) | ((q1x-q5x) = (q1y-q5y) | (q1x-q5x) = -(q1y-q5y)) | ((q1x-q6x) = (q1y-q6y) | (q1x-q6x) = -(q1y-q6y)) | ((q1x-q7x) = (q1y-q7y) | (q1x-q7x) = -(q1y-q7y));
+formula under_attack_column = (q1x = q2x)| (q1x = q3x)| (q1x = q4x)| (q1x = q5x)| (q1x = q6x)| (q1x = q7x);
+
+module q2 = q1 [ q1x=q2x, q2x=q1x, q1y=q2y, q2y=q1y ] endmodule
+module q3 = q1 [ q1x=q3x, q3x=q1x, q1y=q3y, q3y=q1y ] endmodule
+module q4 = q1 [ q1x=q4x, q4x=q1x, q1y=q4y, q4y=q1y ] endmodule
+module q5 = q1 [ q1x=q5x, q5x=q1x, q1y=q5y, q5y=q1y ] endmodule
+module q6 = q1 [ q1x=q6x, q6x=q1x, q1y=q6y, q6y=q1y ] endmodule
+module q7 = q1 [ q1x=q7x, q7x=q1x, q1y=q7y, q7y=q1y ] endmodule

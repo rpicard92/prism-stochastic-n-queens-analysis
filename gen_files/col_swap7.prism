@@ -17,7 +17,7 @@ global q7y : [1..7] init 7;
 
 module q1
 
-	 [] under_attack -> 0.1666: (q1x' = q2x) & (q2x' = q1x) + 0.1666: (q1x' = q3x) & (q3x' = q1x) + 0.1666: (q1x' = q4x) & (q4x' = q1x) + 0.1666: (q1x' = q5x) & (q5x' = q1x) + 0.1666: (q1x' = q6x) & (q6x' = q1x) + 0.1670: (q1x' = q7x) & (q7x' = q1x);
+	 [] under_attack -> 1/33: (q1x' = q2x) & (q2x' = q1x) + 1/33: (q1x' = q3x) & (q3x' = q1x) + 1/33: (q1x' = q4x) & (q4x' = q1x) + 2/33: (q1x' = q5x) & (q5x' = q1x) + 5/33: (q1x' = q6x) & (q6x' = q1x) + 23/33: (q1x' = q7x) & (q7x' = q1x);
 
 endmodule
 

@@ -13,12 +13,14 @@ with open('gen_files/col_swap'+str(n)+'.prism', 'w') as f:
     f.write('\n')
     f.write('module q1\n\n')
     f.write('\t [] under_attack -> ')
-    tot=0
+    #tot=0
     for i in range(n-2):
-        val=1/(n-1)
-        tot=tot+float(str(val)[:6])
-        f.write(str(val)[:6]+': (q1x\' = q'+str(i+2)+'x) & (q'+str(i+2)+'x\' = q1x) + ')
-    f.write(str(1-tot)[:6]+': (q1x\' = q'+str(n)+'x) & (q'+str(n)+'x\' = q1x);\n\n')
+        #val=1/(n-1)
+        #tot=tot+float(str(val)[:6])
+        #f.write(str(val)[:6]+': (q1x\' = q'+str(i+2)+'x) & (q'+str(i+2)+'x\' = q1x) + ')
+        f.write('1/'+str(n-1)+': (q1x\' = q'+str(i+2)+'x) & (q'+str(i+2)+'x\' = q1x) + ')
+    #f.write(str(1-tot)[:6]+': (q1x\' = q'+str(n)+'x) & (q'+str(n)+'x\' = q1x);\n\n')
+    f.write('1/'+str(n-1)+': (q1x\' = q'+str(n)+'x) & (q'+str(n)+'x\' = q1x);\n\n')
     f.write('endmodule\n\n')
     f.write('formula under_attack = ')
     for i in range(n-2):

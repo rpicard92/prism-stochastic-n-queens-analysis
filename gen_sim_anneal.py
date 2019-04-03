@@ -34,12 +34,14 @@ with open('gen_files/sim_anneal'+str(n)+'.prism', 'w') as f:
     f.write('module q1\n\n')
 
     f.write('\t[] (valid=0) & (total_atk > 0) -> ')
-    tot=0
+    #tot=0
     for i in range(n-2):
-        val=1/(n-1)
-        tot=tot+float(str(val)[:6])
-        f.write(str(val)[:6]+': (prev_atk\' = total_atk) & (v1\' = 0) & (valid\' = 1) & (v'+str(i+2)+'\'= 2) & (stor1\'=q1x)  & (stor2\'=q'+str(i+2)+'x) + ')
-    f.write(str(1-tot)[:6]+': (prev_atk\' = total_atk)  & (v1\' = 0) & (valid\' = 1) & (v'+str(n)+'\'= 2)  & (stor1\'=q1x) & (stor2\'=q'+str(n)+'x);\n\n')
+        #val=1/(n-1)
+        #tot=tot+float(str(val)[:6])
+        #f.write(str(val)[:6]+': (prev_atk\' = total_atk) & (v1\' = 0) & (valid\' = 1) & (v'+str(i+2)+'\'= 2) & (stor1\'=q1x)  & (stor2\'=q'+str(i+2)+'x) + ')
+        f.write('1/'+str(n-1)+': (prev_atk\' = total_atk) & (v1\' = 0) & (valid\' = 1) & (v'+str(i+2)+'\'= 2) & (stor1\'=q1x)  & (stor2\'=q'+str(i+2)+'x) + ')
+    #f.write(str(1-tot)[:6]+': (prev_atk\' = total_atk)  & (v1\' = 0) & (valid\' = 1) & (v'+str(n)+'\'= 2)  & (stor1\'=q1x) & (stor2\'=q'+str(n)+'x);\n\n')
+    f.write('1/'+str(n-1)+': (prev_atk\' = total_atk)  & (v1\' = 0) & (valid\' = 1) & (v'+str(n)+'\'= 2)  & (stor1\'=q1x) & (stor2\'=q'+str(n)+'x);\n\n')
 
     f.write('\t[] (valid=1) & (v1=2) -> (attempted_swap_counter\'=attempted_swap_counter+1) & (prev_atk1\'=total_atk) & (valid\'=2);\n')
     f.write('\t[] (valid=2) & (v1=0) -> (q1x\'=stor2)& (valid\'=3);\n')

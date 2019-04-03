@@ -14,18 +14,22 @@ with open('gen_files/col_move'+str(n)+'.prism', 'w') as f:
     f.write('module q1\n\n')
     for j in range(n):
         f.write('\t [] (under_attack_diag | under_attack_column) & q1x = '+str(j+1)+' -> ')
-        tot=0
+        #tot=0
         for i in range(n-2):
-            val=1/(n-1)
-            tot=tot+float(str(val)[:6])
+            #val=1/(n-1)
+            #tot=tot+float(str(val)[:6])
             if not i+2==j+1:
-                f.write(str(val)[:6]+': (q1x\' = '+str(i+2)+') + ')
+                #f.write(str(val)[:6]+': (q1x\' = '+str(i+2)+') + ')
+                f.write('1/'+str(n-1)+': (q1x\' = '+str(i+2)+') + ')
             else:
-                f.write(str(val)[:6]+': (q1x\' = 1) + ')
+                #f.write(str(val)[:6]+': (q1x\' = 1) + ')
+                f.write('1/'+str(n-1)+': (q1x\' = 1) + ')
         if not j==n-1:
-            f.write(str(1-tot)[:6]+': (q1x\' = '+str(n)+');\n')
+            #f.write(str(1-tot)[:6]+': (q1x\' = '+str(n)+');\n')
+            f.write('1/'+str(n-1)+': (q1x\' = '+str(n)+');\n')
         else:
-            f.write(str(1-tot)[:6]+': (q1x\' = 1);\n\n')
+            #f.write(str(1-tot)[:6]+': (q1x\' = 1);\n\n')
+            f.write('1/'+str(n-1)+': (q1x\' = 1);\n\n')
     f.write('endmodule\n\n')
     f.write('formula under_attack_diag = ')
     for i in range(n-2):

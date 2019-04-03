@@ -1,7 +1,6 @@
 
 
 import sys
-print('THIS IS NOT DONE THIS IS NOT DONE THIS IS NOT DONE')
 n=int(sys.argv[1])
 
 with open('gen_files/sim_anneal'+str(n)+'.prism', 'w') as f:
@@ -21,7 +20,8 @@ with open('gen_files/sim_anneal'+str(n)+'.prism', 'w') as f:
         f.write('global v'+str(i+1)+' : [0..2] init 1;\n')
 
     f.write('\n')
-    f.write('global counter : [1..10000] init 1;\n')
+    f.write('global success_swap_counter : [1..10000] init 1;\n')
+    f.write('global attempted_swap_counter : [1..10000] init 1;\n')
     f.write('global valid : [0..8] init 0;\n')#0 means base, 1 means swap selected
     f.write('global probability : [1..100] init 100;\n')
     f.write('const int probability_max = 100;\n')
@@ -41,14 +41,14 @@ with open('gen_files/sim_anneal'+str(n)+'.prism', 'w') as f:
         f.write(str(val)[:6]+': (prev_atk\' = total_atk) & (v1\' = 0) & (valid\' = 1) & (v'+str(i+2)+'\'= 2) & (stor1\'=q1x)  & (stor2\'=q'+str(i+2)+'x) + ')
     f.write(str(1-tot)[:6]+': (prev_atk\' = total_atk)  & (v1\' = 0) & (valid\' = 1) & (v'+str(n)+'\'= 2)  & (stor1\'=q1x) & (stor2\'=q'+str(n)+'x);\n\n')
 
-    f.write('\t[] (valid=1) & (v1=2) -> (prev_atk1\'=total_atk) & (valid\'=2);\n')
+    f.write('\t[] (valid=1) & (v1=2) -> (attempted_swap_counter\'=attempted_swap_counter+1) & (prev_atk1\'=total_atk) & (valid\'=2);\n')
     f.write('\t[] (valid=2) & (v1=0) -> (q1x\'=stor2)& (valid\'=3);\n')
     f.write('\t[] (valid=3) & (v1=2) -> (q1x\'=stor1) & (valid\'=4);\n')
     f.write('\t[] (valid=4) & (v1=2) -> (cur_atk\'=total_atk) & (valid\'=5);\n')
 
     f.write('\t[] (valid=5) & ((prev_atk + prev_atk1) >= (total_atk+cur_atk)) & (v1 = 0)-> (v1\'=1) & (valid\'=6);\n')
     f.write('\t[] (valid=5) & ((prev_atk + prev_atk1) < (total_atk+cur_atk)) & (v1 = 0) -> probability/probability_max: (valid\'=6) & (v1\'=1) + (1-probability/probability_max): (valid\'=7);\n')
-    f.write('\t[] (valid=6) & (v1=2) -> (valid\'=0) & (v1\'=1) & (counter\'=counter+1) & (probability\'=max(1, probability-1));\n')
+    f.write('\t[] (valid=6) & (v1=2) -> (valid\'=0) & (v1\'=1) & (success_swap_counter\'=success_swap_counter+1) & (probability\'=max(1, probability-1));\n')
     #f.write('\t[] (valid=7) & (v1=0) -> (valid\'=0) & (v1\'=1);\n')
     f.write('\t[] (valid=7) & (v1=2) -> (valid\'=8) & (q1x\'=stor2) & (v1\'=1);\n')
     f.write('\t[] (valid=8) & (v1=0) -> (valid\'=0) & (q1x\'=stor1) & (v1\'=1);\n')

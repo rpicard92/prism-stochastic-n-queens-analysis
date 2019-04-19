@@ -8,7 +8,7 @@ with open('gen_files/sim_anneal'+str(n)+'.prism', 'w') as f:
 
     for i in range(n):
         f.write('global q'+str(i+1)+'x : [1..'+str(n)+'] init '+str(i+1)+';\n')
-        f.write('global q'+str(i+1)+'y : [1..'+str(n)+'] init '+str(i+1)+';\n')
+        f.write('const int q'+str(i+1)+'y = '+str(i+1)+';\n')
     #f.write('\n')
     #for i in range(n):
     #    f.write('global p'+str(i+1)+' : [1..'+str(n)+'] init '+str(i+1)+';\n')

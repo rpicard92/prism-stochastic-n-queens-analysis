@@ -9,7 +9,7 @@ with open('gen_files/col_move'+str(n)+'.prism', 'w') as f:
 
     for i in range(n):
         f.write('global q'+str(i+1)+'x : [1..'+str(n)+'] init '+str(i+1)+';\n')
-        f.write('global q'+str(i+1)+'y : [1..'+str(n)+'] init '+str(i+1)+';\n')
+        f.write('const int q'+str(i+1)+'y = '+str(i+1)+';\n')
     f.write('\n')
     f.write('module q1\n\n')
     for j in range(n):

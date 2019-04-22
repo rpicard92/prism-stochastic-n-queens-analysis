@@ -33,7 +33,7 @@ with open('gen_files/exp_col_swap'+str(n)+'.prism', 'w') as f:
 
 
     
-    f.write('label overall_attack = ')
+    f.write('formula overall_attack = ')
     for j in range(1, n):
         for i in range(j+1, n+1):
             f.write('((q'+str(j)+'x-q'+str(i)+'x) = (q'+str(j)+'y-q'+str(i)+'y) | (q'+str(j)+'x-q'+str(i)+'x) = -(q'+str(j)+'y-q'+str(i)+'y)) | ')

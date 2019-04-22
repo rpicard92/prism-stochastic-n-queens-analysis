@@ -1,0 +1,60 @@
+dtmc
+
+const int N;
+global q1x : [1..7] init 1;
+const int q1y = 1;
+global q2x : [1..7] init 2;
+const int q2y = 2;
+global q3x : [1..7] init 3;
+const int q3y = 3;
+global q4x : [1..7] init 4;
+const int q4y = 4;
+global q5x : [1..7] init 5;
+const int q5y = 5;
+global q6x : [1..7] init 6;
+const int q6y = 6;
+global q7x : [1..7] init 7;
+const int q7y = 7;
+
+global v1 : [0..2] init 1;
+global v2 : [0..2] init 1;
+global v3 : [0..2] init 1;
+global v4 : [0..2] init 1;
+global v5 : [0..2] init 1;
+global v6 : [0..2] init 1;
+global v7 : [0..2] init 1;
+
+global success_swap_counter : [0..N] init 0;
+global attempted_swap_counter : [0..N] init 0;
+global valid : [0..8] init 0;
+global probability : [1..100] init 100;
+const int probability_max = 100;
+global cur_atk : [0..7] init 0;
+global prev_atk : [0..7] init 7;
+global prev_atk1 : [0..7] init 7;
+global stor1 : [1..7] init 1;
+global stor2 : [1..7] init 1;
+module q1
+
+	[] (valid=0) & (total_atk > 0) & (success_swap_counter<N) -> 1/6: (prev_atk' = total_atk) & (v1' = 0) & (valid' = 1) & (v2'= 2) & (stor1'=q1x)  & (stor2'=q2x) + 1/6: (prev_atk' = total_atk) & (v1' = 0) & (valid' = 1) & (v3'= 2) & (stor1'=q1x)  & (stor2'=q3x) + 1/6: (prev_atk' = total_atk) & (v1' = 0) & (valid' = 1) & (v4'= 2) & (stor1'=q1x)  & (stor2'=q4x) + 1/6: (prev_atk' = total_atk) & (v1' = 0) & (valid' = 1) & (v5'= 2) & (stor1'=q1x)  & (stor2'=q5x) + 1/6: (prev_atk' = total_atk) & (v1' = 0) & (valid' = 1) & (v6'= 2) & (stor1'=q1x)  & (stor2'=q6x) + 1/6: (prev_atk' = total_atk)  & (v1' = 0) & (valid' = 1) & (v7'= 2)  & (stor1'=q1x) & (stor2'=q7x);
+
+	[] (valid=1) & (v1=2) & (attempted_swap_counter+1 < N) -> (attempted_swap_counter'=attempted_swap_counter+1) & (prev_atk1'=total_atk) & (valid'=2);
+	[] (valid=2) & (v1=0) -> (q1x'=stor2)& (valid'=3);
+	[] (valid=3) & (v1=2) -> (q1x'=stor1) & (valid'=4);
+	[] (valid=4) & (v1=2) -> (cur_atk'=total_atk) & (valid'=5);
+	[] (valid=5) & ((prev_atk + prev_atk1) >= (total_atk+cur_atk)) & (v1 = 0)-> (v1'=1) & (valid'=6);
+	[] (valid=5) & ((prev_atk + prev_atk1) < (total_atk+cur_atk)) & (v1 = 0) -> probability/probability_max: (valid'=6) & (v1'=1) + (1-probability/probability_max): (valid'=7);
+	[] (valid=6) & (v1=2) & (success_swap_counter+1 < N) -> (valid'=0) & (v1'=1) & (success_swap_counter'=success_swap_counter+1) & (probability'=max(1, probability-1));
+	[] (valid=7) & (v1=2) -> (valid'=8) & (q1x'=stor2) & (v1'=1);
+	[] (valid=8) & (v1=0) -> (valid'=0) & (q1x'=stor1) & (v1'=1);
+endmodule
+
+formula total_atk = (((q1x-q2x) = (q1y-q2y) | (q1x-q2x) = -(q1y-q2y))?1:0)+ (((q1x-q3x) = (q1y-q3y) | (q1x-q3x) = -(q1y-q3y))?1:0)+ (((q1x-q4x) = (q1y-q4y) | (q1x-q4x) = -(q1y-q4y))?1:0)+ (((q1x-q5x) = (q1y-q5y) | (q1x-q5x) = -(q1y-q5y))?1:0)+ (((q1x-q6x) = (q1y-q6y) | (q1x-q6x) = -(q1y-q6y))?1:0)+ (((q1x-q7x) = (q1y-q7y) | (q1x-q7x) = -(q1y-q7y))?1:0);
+formula overall_attack = ((q1x-q2x) = (q1y-q2y) | (q1x-q2x) = -(q1y-q2y)) | (q1x = q2x)| ((q1x-q3x) = (q1y-q3y) | (q1x-q3x) = -(q1y-q3y)) | (q1x = q3x)| ((q1x-q4x) = (q1y-q4y) | (q1x-q4x) = -(q1y-q4y)) | (q1x = q4x)| ((q1x-q5x) = (q1y-q5y) | (q1x-q5x) = -(q1y-q5y)) | (q1x = q5x)| ((q1x-q6x) = (q1y-q6y) | (q1x-q6x) = -(q1y-q6y)) | (q1x = q6x)| ((q1x-q7x) = (q1y-q7y) | (q1x-q7x) = -(q1y-q7y)) | (q1x = q7x)| ((q2x-q3x) = (q2y-q3y) | (q2x-q3x) = -(q2y-q3y)) | (q2x = q3x)| ((q2x-q4x) = (q2y-q4y) | (q2x-q4x) = -(q2y-q4y)) | (q2x = q4x)| ((q2x-q5x) = (q2y-q5y) | (q2x-q5x) = -(q2y-q5y)) | (q2x = q5x)| ((q2x-q6x) = (q2y-q6y) | (q2x-q6x) = -(q2y-q6y)) | (q2x = q6x)| ((q2x-q7x) = (q2y-q7y) | (q2x-q7x) = -(q2y-q7y)) | (q2x = q7x)| ((q3x-q4x) = (q3y-q4y) | (q3x-q4x) = -(q3y-q4y)) | (q3x = q4x)| ((q3x-q5x) = (q3y-q5y) | (q3x-q5x) = -(q3y-q5y)) | (q3x = q5x)| ((q3x-q6x) = (q3y-q6y) | (q3x-q6x) = -(q3y-q6y)) | (q3x = q6x)| ((q3x-q7x) = (q3y-q7y) | (q3x-q7x) = -(q3y-q7y)) | (q3x = q7x)| ((q4x-q5x) = (q4y-q5y) | (q4x-q5x) = -(q4y-q5y)) | (q4x = q5x)| ((q4x-q6x) = (q4y-q6y) | (q4x-q6x) = -(q4y-q6y)) | (q4x = q6x)| ((q4x-q7x) = (q4y-q7y) | (q4x-q7x) = -(q4y-q7y)) | (q4x = q7x)| ((q5x-q6x) = (q5y-q6y) | (q5x-q6x) = -(q5y-q6y)) | (q5x = q6x)| ((q5x-q7x) = (q5y-q7y) | (q5x-q7x) = -(q5y-q7y)) | (q5x = q7x)| ((q6x-q7x) = (q6y-q7y) | (q6x-q7x) = -(q6y-q7y)) | (q6x = q7x);
+
+module q2 = q1 [ q1x=q2x, q2x=q1x, q1y=q2y, q2y=q1y, v1=v2, v2=v1] endmodule
+module q3 = q1 [ q1x=q3x, q3x=q1x, q1y=q3y, q3y=q1y, v1=v3, v3=v1] endmodule
+module q4 = q1 [ q1x=q4x, q4x=q1x, q1y=q4y, q4y=q1y, v1=v4, v4=v1] endmodule
+module q5 = q1 [ q1x=q5x, q5x=q1x, q1y=q5y, q5y=q1y, v1=v5, v5=v1] endmodule
+module q6 = q1 [ q1x=q6x, q6x=q1x, q1y=q6y, q6y=q1y, v1=v6, v6=v1] endmodule
+module q7 = q1 [ q1x=q7x, q7x=q1x, q1y=q7y, q7y=q1y, v1=v7, v7=v1] endmodule

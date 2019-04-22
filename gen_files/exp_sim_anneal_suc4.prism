@@ -1,0 +1,48 @@
+dtmc
+
+const int N;
+global q1x : [1..4] init 1;
+const int q1y = 1;
+global q2x : [1..4] init 2;
+const int q2y = 2;
+global q3x : [1..4] init 3;
+const int q3y = 3;
+global q4x : [1..4] init 4;
+const int q4y = 4;
+
+global v1 : [0..2] init 1;
+global v2 : [0..2] init 1;
+global v3 : [0..2] init 1;
+global v4 : [0..2] init 1;
+
+global success_swap_counter : [0..N] init 0;
+global attempted_swap_counter : [0..N] init 0;
+global valid : [0..8] init 0;
+global probability : [1..100] init 100;
+const int probability_max = 100;
+global cur_atk : [0..4] init 0;
+global prev_atk : [0..4] init 4;
+global prev_atk1 : [0..4] init 4;
+global stor1 : [1..4] init 1;
+global stor2 : [1..4] init 1;
+module q1
+
+	[] (valid=0) & (total_atk > 0) & (success_swap_counter<N) -> 1/3: (prev_atk' = total_atk) & (v1' = 0) & (valid' = 1) & (v2'= 2) & (stor1'=q1x)  & (stor2'=q2x) + 1/3: (prev_atk' = total_atk) & (v1' = 0) & (valid' = 1) & (v3'= 2) & (stor1'=q1x)  & (stor2'=q3x) + 1/3: (prev_atk' = total_atk)  & (v1' = 0) & (valid' = 1) & (v4'= 2)  & (stor1'=q1x) & (stor2'=q4x);
+
+	[] (valid=1) & (v1=2) & (attempted_swap_counter+1 < N)-> (attempted_swap_counter'=attempted_swap_counter+1) & (prev_atk1'=total_atk) & (valid'=2);
+	[] (valid=2) & (v1=0) -> (q1x'=stor2)& (valid'=3);
+	[] (valid=3) & (v1=2) -> (q1x'=stor1) & (valid'=4);
+	[] (valid=4) & (v1=2) -> (cur_atk'=total_atk) & (valid'=5);
+	[] (valid=5) & ((prev_atk + prev_atk1) >= (total_atk+cur_atk)) & (v1 = 0)-> (v1'=1) & (valid'=6);
+	[] (valid=5) & ((prev_atk + prev_atk1) < (total_atk+cur_atk)) & (v1 = 0) -> probability/probability_max: (valid'=6) & (v1'=1) + (1-probability/probability_max): (valid'=7);
+	[] (valid=6) & (v1=2) & (success_swap_counter+1 < N) -> (valid'=0) & (v1'=1) & (success_swap_counter'=success_swap_counter+1) & (probability'=max(1, probability-1));
+	[] (valid=7) & (v1=2) -> (valid'=8) & (q1x'=stor2) & (v1'=1);
+	[] (valid=8) & (v1=0) -> (valid'=0) & (q1x'=stor1) & (v1'=1);
+endmodule
+
+formula total_atk = (((q1x-q2x) = (q1y-q2y) | (q1x-q2x) = -(q1y-q2y))?1:0)+ (((q1x-q3x) = (q1y-q3y) | (q1x-q3x) = -(q1y-q3y))?1:0)+ (((q1x-q4x) = (q1y-q4y) | (q1x-q4x) = -(q1y-q4y))?1:0);
+formula overall_attack = ((q1x-q2x) = (q1y-q2y) | (q1x-q2x) = -(q1y-q2y)) | (q1x = q2x)| ((q1x-q3x) = (q1y-q3y) | (q1x-q3x) = -(q1y-q3y)) | (q1x = q3x)| ((q1x-q4x) = (q1y-q4y) | (q1x-q4x) = -(q1y-q4y)) | (q1x = q4x)| ((q2x-q3x) = (q2y-q3y) | (q2x-q3x) = -(q2y-q3y)) | (q2x = q3x)| ((q2x-q4x) = (q2y-q4y) | (q2x-q4x) = -(q2y-q4y)) | (q2x = q4x)| ((q3x-q4x) = (q3y-q4y) | (q3x-q4x) = -(q3y-q4y)) | (q3x = q4x);
+
+module q2 = q1 [ q1x=q2x, q2x=q1x, q1y=q2y, q2y=q1y, v1=v2, v2=v1] endmodule
+module q3 = q1 [ q1x=q3x, q3x=q1x, q1y=q3y, q3y=q1y, v1=v3, v3=v1] endmodule
+module q4 = q1 [ q1x=q4x, q4x=q1x, q1y=q4y, q4y=q1y, v1=v4, v4=v1] endmodule

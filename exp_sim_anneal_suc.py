@@ -45,14 +45,14 @@ with open('gen_files/exp_sim_anneal_suc'+str(n)+'.prism', 'w') as f:
     #f.write(str(1-tot)[:6]+': (prev_atk\' = total_atk)  & (v1\' = 0) & (valid\' = 1) & (v'+str(n)+'\'= 2)  & (stor1\'=q1x) & (stor2\'=q'+str(n)+'x);\n\n')
     f.write('1/'+str(n-1)+': (prev_atk\' = total_atk)  & (v1\' = 0) & (valid\' = 1) & (v'+str(n)+'\'= 2)  & (stor1\'=q1x) & (stor2\'=q'+str(n)+'x);\n\n')
 
-    f.write('\t[] (valid=1) & (v1=2) -> (attempted_swap_counter\'=attempted_swap_counter+1) & (prev_atk1\'=total_atk) & (valid\'=2);\n')
+    f.write('\t[] (valid=1) & (v1=2) & (attempted_swap_counter+1 < N) -> (attempted_swap_counter\'=attempted_swap_counter+1) & (prev_atk1\'=total_atk) & (valid\'=2);\n')
     f.write('\t[] (valid=2) & (v1=0) -> (q1x\'=stor2)& (valid\'=3);\n')
     f.write('\t[] (valid=3) & (v1=2) -> (q1x\'=stor1) & (valid\'=4);\n')
     f.write('\t[] (valid=4) & (v1=2) -> (cur_atk\'=total_atk) & (valid\'=5);\n')
 
     f.write('\t[] (valid=5) & ((prev_atk + prev_atk1) >= (total_atk+cur_atk)) & (v1 = 0)-> (v1\'=1) & (valid\'=6);\n')
     f.write('\t[] (valid=5) & ((prev_atk + prev_atk1) < (total_atk+cur_atk)) & (v1 = 0) -> probability/probability_max: (valid\'=6) & (v1\'=1) + (1-probability/probability_max): (valid\'=7);\n')
-    f.write('\t[] (valid=6) & (v1=2) -> (valid\'=0) & (v1\'=1) & (success_swap_counter\'=success_swap_counter+1) & (probability\'=max(1, probability-1));\n')
+    f.write('\t[] (valid=6) & (v1=2) & (success_swap_counter+1 < N) -> (valid\'=0) & (v1\'=1) & (success_swap_counter\'=success_swap_counter+1) & (probability\'=max(1, probability-1));\n')
     #f.write('\t[] (valid=7) & (v1=0) -> (valid\'=0) & (v1\'=1);\n')
     f.write('\t[] (valid=7) & (v1=2) -> (valid\'=8) & (q1x\'=stor2) & (v1\'=1);\n')
     f.write('\t[] (valid=8) & (v1=0) -> (valid\'=0) & (q1x\'=stor1) & (v1\'=1);\n')

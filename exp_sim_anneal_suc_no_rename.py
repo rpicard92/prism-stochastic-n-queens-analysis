@@ -39,7 +39,7 @@ with open('gen_files/exp_sim_anneal_suc'+str(n)+'.prism', 'w') as f:
     for j in range(1, n):
         for i in range(j+1, n+1):
         
-        f.write('1/'+str(n-1)+': (prev_atk\' = overall_atk_num) & (v1\' = 0) & (valid\' = 1) & (v'+str(i+2)+'\'= 2) & (stor1\'=q1x)  & (stor2\'=q'+str(i+2)+'x) + ')
+    f.write('1/'+str(n-1)+': (prev_atk\' = overall_atk_num) & (v1\' = 0) & (valid\' = 1) & (v'+str(i+2)+'\'= 2) & (stor1\'=q1x)  & (stor2\'=q'+str(i+2)+'x) + ')
     f.write('1/'+str(n-1)+': (prev_atk\' = total_atk)  & (v1\' = 0) & (valid\' = 1) & (v'+str(n)+'\'= 2)  & (stor1\'=q1x) & (stor2\'=q'+str(n)+'x);\n\n')
 
     f.write('\t[] (valid=1) & (v1=2) -> (attempted_swap_counter\'=attempted_swap_counter+1) & (prev_atk1\'=total_atk) & (valid\'=2);\n')

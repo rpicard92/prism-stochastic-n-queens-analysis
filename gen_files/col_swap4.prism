@@ -1,13 +1,13 @@
 dtmc
 
 global q1x : [1..4] init 1;
-global q1y : [1..4] init 1;
+const int q1y = 1;
 global q2x : [1..4] init 2;
-global q2y : [1..4] init 2;
+const int q2y = 2;
 global q3x : [1..4] init 3;
-global q3y : [1..4] init 3;
+const int q3y = 3;
 global q4x : [1..4] init 4;
-global q4y : [1..4] init 4;
+const int q4y = 4;
 
 module q1
 

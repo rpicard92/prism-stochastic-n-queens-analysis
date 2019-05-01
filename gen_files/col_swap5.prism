@@ -1,0 +1,25 @@
+dtmc
+
+global q1x : [1..5] init 1;
+const int q1y = 1;
+global q2x : [1..5] init 2;
+const int q2y = 2;
+global q3x : [1..5] init 3;
+const int q3y = 3;
+global q4x : [1..5] init 4;
+const int q4y = 4;
+global q5x : [1..5] init 5;
+const int q5y = 5;
+
+module q1
+
+	 [] under_attack -> 1/4: (q1x' = q2x) & (q2x' = q1x) + 1/4: (q1x' = q3x) & (q3x' = q1x) + 1/4: (q1x' = q4x) & (q4x' = q1x) + 1/4: (q1x' = q5x) & (q5x' = q1x);
+
+endmodule
+
+formula under_attack = ((q1x-q2x) = (q1y-q2y) | (q1x-q2x) = -(q1y-q2y)) | ((q1x-q3x) = (q1y-q3y) | (q1x-q3x) = -(q1y-q3y)) | ((q1x-q4x) = (q1y-q4y) | (q1x-q4x) = -(q1y-q4y)) | ((q1x-q5x) = (q1y-q5y) | (q1x-q5x) = -(q1y-q5y));
+
+module q2 = q1 [ q1x=q2x, q2x=q1x, q1y=q2y, q2y=q1y ] endmodule
+module q3 = q1 [ q1x=q3x, q3x=q1x, q1y=q3y, q3y=q1y ] endmodule
+module q4 = q1 [ q1x=q4x, q4x=q1x, q1y=q4y, q4y=q1y ] endmodule
+module q5 = q1 [ q1x=q5x, q5x=q1x, q1y=q5y, q5y=q1y ] endmodule
